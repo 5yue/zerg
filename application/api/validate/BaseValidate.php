@@ -22,7 +22,12 @@ class BaseValidate extends Validate
         $request = Request::instance();
         $params = $request->param();
 
-        $result = $this->check($params);
+        $result = $this->batch()->check($params);//批量处理
+        /**
+         * 用以下方法时，只能返回一个错误内容
+         * $result = $this->check($params);
+         *
+         */
         if(!$result){
             $e = new ParameterException([//初始化成员变量，赋值
                 //也可以可选参数赋值，即，部分参数的赋值
