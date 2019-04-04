@@ -28,10 +28,11 @@ class Banner
         $banner = BannerModel::getBannerByID($id);
 
         if(!$banner){
-            throw new Exception('内部错误');
+//            throw new Exception('内部错误');
+            throw new BannerMissException();
         }
 
-        return $banner;
+        return json($banner);
 
 
         /*$data=[

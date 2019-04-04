@@ -8,21 +8,19 @@
 
 namespace app\lib\exception;
 
-
 use Exception;
-use think\Config;
 use think\exception\Handle;
 use think\Log;
 use think\Request;
 
 class ExceptionHandler extends Handle
 {
-    public $code;
-    public $msg;
-    public $errorCode;
+    private $code;
+    private $msg;
+    private $errorCode;
     //还需要返回客户端当前请求的URL路径
 
-    public function render(\Exception $e)
+    public function render(\Exception $e)//\Exception是指，基类的exception
     {
 //        return json('~~~~~~~~~~~');
         if ($e instanceof BaseException)
@@ -46,7 +44,7 @@ class ExceptionHandler extends Handle
                 //return default error page
                 return parent::render($e);
             }
-            else {
+            else{
                 $this->code = 500;
                 $this->msg = '服务器内部错误，不想告诉你';
                 $this->errorCode = 999;
@@ -59,9 +57,10 @@ class ExceptionHandler extends Handle
             'error_code' => $this->errorCode,
             'request_url' => $request->url()//获取当前请求路径
         ];
+//        var_dump(json($result, $this->code));
         return json($result, $this->code);
     }
-    private function recordErrorLog(Exception $e){
+    private function recordErrorLog(\Exception $e){
         Log::init([//打开tp5的日志记录功能
            'type'=> 'File',
             'path'=>LOG_PATH,
