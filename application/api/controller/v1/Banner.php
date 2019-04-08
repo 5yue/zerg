@@ -25,14 +25,16 @@ class Banner
     public function getBanner($id) {
         (new IDMustBePostiveInt())->goCheck();
 
-        $banner = BannerModel::getBannerByID($id);
+        $banner  = BannerModel::get($id);//这是使用的module，继承与think\module。或得的是一个对象
+        //由于表的对应关系，查询到的是banner表
+//        $banner = BannerModel::getBannerByID($id);//这是自定义方法
 
         if(!$banner){
 //            throw new Exception('内部错误');
             throw new BannerMissException();
         }
 
-        return json($banner);
+        return $banner;
 
 
         /*$data=[

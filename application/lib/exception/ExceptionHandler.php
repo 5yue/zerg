@@ -57,7 +57,6 @@ class ExceptionHandler extends Handle
             'error_code' => $this->errorCode,
             'request_url' => $request->url()//获取当前请求路径
         ];
-//        var_dump(json($result, $this->code));
         return json($result, $this->code);
     }
     private function recordErrorLog(\Exception $e){
