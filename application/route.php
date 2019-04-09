@@ -23,4 +23,4 @@ use think\Route;
 //傳遞參數
 //Route::get('hello/:id','sample/Test/hello');
 //Route::post('hello/:id','sample/Test/hello');
-Route::get('api/v1/banner/:id','api/v1.Banner/getBanner');
+Route::get('api/:version/banner/:id','api/:version.Banner/getBanner');
