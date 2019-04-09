@@ -24,18 +24,32 @@ class Banner
      */
     public function getBanner($id) {
         (new IDMustBePostiveInt())->goCheck();
-
-        $banner  = BannerModel::get($id);//这是使用的module，继承与think\module。或得的是一个对象
-        //由于表的对应关系，查询到的是banner表
-//        $banner = BannerModel::getBannerByID($id);//这是自定义方法
-
+//        模型静态调用
+        /**
+         *  推荐使用静态调用，模型查询
+         *  1、静态调用更加简洁，不需要实例化模型对象
+         *  2、模型的本质意义上来说
+         */
+//        $banner  = BannerModel::with(['items','items.img'])->find($id);//这是使用的module，继承与think\module。或得的是一个对象
+//        实例对象调用，先实例化模型
+        $banner = BannerModel::getBannerByID($id);//这是自定义方法
+//        $banner->hidden(['update_time','delete_time']);//隐藏指定字段,现在模型里已经不能自动显示有这些函数了
+//        $banner->visible(['id']);//显示指定字段
+//        $data = $banner->toArray();
+//        unset($data['delete_time']);
         if(!$banner){
 //            throw new Exception('内部错误');
             throw new BannerMissException();
         }
-
+//        $c = config('setting.img_prefix');\\可以获取我们在setting中定义的基路径
         return $banner;
-
+        /**
+         * 以下为未开展业务代码时所使用的
+         */
+//        $banner = new BannerModel();
+//        $banner = $banner->get($id);
+        //由于表的对应关系，查询到的是banner表
+//        $banner = BannerModel::getBannerByID($id);//这是自定义方法
 
         /*$data=[
           'name' => 'vandor12324234',

@@ -8,14 +8,14 @@
 
 namespace app\api\model;
 
-
-use think\Db;
-use think\Exception;
-use think\Model;
-
-class Banner extends Model
+class Banner extends BaseModel
 {
 //    protected $table = 'category';//当数据库表名与实体类名不相同时的处理情况
+    public function items(){//关联函数
+        //模型名，外键，需要传入的当前模型主键
+        return $this->hasMany('BannerItem','banner_id','id');
+    }
+    protected $hidden = ['delete_time','update_time'];
     /**
      * @param $id
      * @return false|\PDOStatement|string|\think\Collection
@@ -25,16 +25,10 @@ class Banner extends Model
      */
     public static function getBannerByID($id)
     {
+        $banner  = self::with(['items','items.img'])
+            ->find($id);
+        return $banner;
         //TODO: 根据Banner ID号 获取Banner信息
-////        try{
-////            1/0;
-////        }
-////        catch (Exception $e){
-////            throw $e;
-////        }
-//        return 'this is a banner info';
-//        return null
-//;
         /**
          * 查询方式：
          * 1、原生sql语句查询
@@ -47,12 +41,12 @@ class Banner extends Model
 //        $result = Db::table('banner_item')->where('banner_id','=',$id)
 //            ->select();//find()只能返回一维数组，即一条数据。select()可以返回二维数组，即多条数据
         //闭包
-        $result = Db::table('banner_item')
-//            ->fetchSql()//使用这个链式方法，可以返回原生sql语句
-            ->where(function ($query) use ($id){//use ($id)是为了引入参数$id
-                $query->where('banner_id','=',$id);
-            })
-            ->select();
-        return $result;
+//        $result = Db::table('banner_item')
+////            ->fetchSql()//使用这个链式方法，可以返回原生sql语句
+//            ->where(function ($query) use ($id){//use ($id)是为了引入参数$id
+//                $query->where('banner_id','=',$id);
+//            })
+//            ->select();
+//        return $result;
     }
 }
