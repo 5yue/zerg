@@ -16,6 +16,15 @@ use think\Validate;
 
 class BaseValidate extends Validate
 {
+    protected  function isPositiveInteger ($value, $rule='', $data='', $fieId='')
+    {
+        if (is_numeric($value) && is_int($value+0) && ($value+0)>0){
+            return true;
+        } else{
+            return false;
+//            return $fieId.'必须是正整数' ;
+        }
+    }
     public function goCheck(){
         //获取http传入的参数
         //对这些参数做校验
