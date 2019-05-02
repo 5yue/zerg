@@ -16,6 +16,14 @@ use think\Validate;
 
 class BaseValidate extends Validate
 {
+    protected function isNotEmpty($value, $rule='', $data='', $field=''){
+        if (empty($value))
+        {
+            return false;
+        } else {
+            return true;
+        }
+    }
     protected  function isPositiveInteger ($value, $rule='', $data='', $fieId='')
     {
         if (is_numeric($value) && is_int($value+0) && ($value+0)>0){

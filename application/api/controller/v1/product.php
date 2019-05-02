@@ -5,7 +5,9 @@ namespace app\api\controller\v1;
 
 use app\api\model\Product as ProductModel;
 use app\api\validate\Count;
+use app\api\validate\IDMustBePostiveInt;
 use app\lib\exception\ProductException;
+use MongoDB\Driver\Exception\CommandException;
 
 class Product
 {
@@ -18,6 +20,16 @@ class Product
 //        $collection = collection($products);//数据集
 //        $products = $collection->hidden(['summary']);//使用数据集的hidden方法，临时隐藏summary数据
         //由于在datbase.php中配置了数据集的返回模式为collection，故：
+        $products = $products->hidden(['summary']);
+        return $products;
+    }
+    
+    public function getAllInCategory($id){
+        (new IDMustBePostiveInt())->goCheck();
+        $products = ProductModel::getProductsByCategoryID($id);
+        if($products->isEmpty()){
+            throw new ProductException();
+        }
         $products = $products->hidden(['summary']);
         return $products;
     }
