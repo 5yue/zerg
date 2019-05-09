@@ -8,11 +8,9 @@
 
 namespace app\api\validate;
 
-
-use think\Validate;
-
 class IDMustBePostiveInt extends BaseValidate
 {
+    // 这里的两个成员变量都继承于validate
     protected $rule = [
       'id' => 'require|isPositiveInteger',
 //        'num' => 'in:1,2,3'

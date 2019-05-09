@@ -10,7 +10,6 @@ namespace app\api\validate;
 
 
 use app\lib\exception\ParameterException;
-use think\Exception;
 use think\Request;
 use think\Validate;
 
@@ -61,6 +60,13 @@ class BaseValidate extends Validate
 //            return $fieId.'必须是正整数' ;
         }
     }
+
+    /**
+     * 检测所有客户端发来的参数是否符合检验类规则
+     * 基类定义了很多自定义验证方法，也可以直接调用
+     * @return bool
+     * @throws ParameterException
+     */
     public function goCheck(){
         //获取http传入的参数
         //对这些参数做校验

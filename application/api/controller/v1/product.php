@@ -8,7 +8,6 @@ use app\api\model\Product as ProductModel;
 use app\api\validate\Count;
 use app\api\validate\IDMustBePostiveInt;
 use app\lib\exception\ProductException;
-use MongoDB\Driver\Exception\CommandException;
 
 class Product
 {
