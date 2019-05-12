@@ -9,6 +9,7 @@ use app\api\model\Product;
 use app\api\model\UserAddress;
 use app\lib\exception\OrderException;
 use app\lib\exception\UserException;
+use think\Db;
 use think\Exception;
 
 class Order
@@ -54,6 +55,12 @@ class Order
 
     private function createOrder($snap)
     {
+        /**
+         * 開啟事務，
+         * 防止出現只保存一個的情況
+         * 在本方法中出現的概率很小，不代表其他的api不會出現，有可能只保存了第一個save()，而saveAll()未保存的情況。
+         */
+        Db::startTrans();//開啟事務
         try {
             $orderNo = $this->makeOrderNo();
             $order = new \app\api\model\Order();
@@ -75,6 +82,11 @@ class Order
             }
             $orderProduct = new OrderProduct();
             $orderProduct->saveAll($this->oproducts);
+            Db::commit();//提交事務
+            /**
+             * 提交事務：
+             * 兩個都會執行，要不就兩個都不執行（如第二個無法執行，第一個也會被撤銷）
+             */
 
             return [
                 'order_no' => $orderNo,
@@ -84,6 +96,7 @@ class Order
         }
         catch (Exception $ex) {
 
+            Db::rollback();//回滾事務，出現錯誤時，回滾以撤銷之前的執行
             throw $ex;
         }
     }
@@ -136,6 +149,23 @@ class Order
             ]);
         }
         return $userAddress->toArray();
+    }
+
+    /**
+     *
+     * 用於檢測庫存量
+     * @param $orderID
+     * 對外的方法
+     */
+    public function checkOrderStock($orderID)
+    {
+        $oProducts = OrderProduct::where('order_id','=','orderID')
+            ->select();
+        $this->oproducts = $oProducts;
+
+        $this->products = $this->getProductsByOrder($oProducts);
+        $status = $this->getOrderStatus();
+        return $status;
     }
 
     private function getOrderStatus()

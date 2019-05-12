@@ -77,4 +77,20 @@ class Token
             throw new TokenException();
         }
     }
+
+    // 是否是一個合法的操作
+    // 比對客戶端傳回的id，和通過令牌去緩存裡找到的id是否相同
+    public static function isValidOperate($checkedUID)
+    {
+        if (!$checkedUID)
+        {
+            throw new Exception('檢測UID時必須傳入一個被檢測的UID');
+        }
+        $currentOperateUID = self::getCurrentUID();
+        if ($currentOperateUID == $checkedUID)
+        {
+            return true;
+        }
+        return false;
+    }
 }
